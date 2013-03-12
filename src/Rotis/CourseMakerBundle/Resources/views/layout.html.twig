@@ -35,15 +35,15 @@
 	              		<div class="nav-collapse collapse"> 
 		                	<p class="navbar-text pull-right">
 		                  		{% if is_granted('IS_AUTHENTICATED_FULLY') %}
-		                  		Bonjour <a href="#" class="navbar-link">{{app.user.username}}</a> :) 
-		                  		<a href="logout">Déconnexion</a> 
+		                  		<a href="logout">Log out</a>
+		                  		Logged in as <a href="#" class="navbar-link">{{app.user.username}}</a>
 		                  		{% else %}
-		                  		<a href="login">Connexion</a>
+		                  		<a href="login">Log in</a>
 		                  		{% endif %}
 		                	</p>
 		                	<ul class="nav">
-		                  		<li class="active"><a href="accueil">Accueil</a></li>
-		                  		<li><a href="#">Infos pratiques</a></li>
+		                  		<li class="active"><a href="accueil">Home</a></li>
+		                  		<li><a href="#">About</a></li>
 		                  		<li><a href="contact">Contact</a></li>
 		                	</ul>
 	              		</div><!--/.nav-collapse -->
@@ -51,10 +51,6 @@
 				</div>
 			</div>
 			
-			<div class="hero-unit">
-				
-				<h1><img src="{{ asset('bundles/rotiscoursemaker/img/logo_24H.png') }}" alt="24Heures" width="128" height="128" />Inscrivez-vous dès maintenant!</h1>
-			</div>
 	
 			<div class="container-fluid">
 				{% block rotiscoursemaker_body %}
