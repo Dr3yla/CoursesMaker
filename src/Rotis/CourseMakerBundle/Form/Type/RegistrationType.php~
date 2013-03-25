@@ -8,17 +8,9 @@ class RegistrationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('user', new UserType());
-        $builder->add(
-            'terms',
-            'checkbox',
-            array('property_path' => 'termsAccepted')
-        );
-        $builder->add(var mail = document.getElementById("mail");
 
-        $("#email").keyup(function() {
-            mail.value = this.value;
-        }););
+        $builder->add('user', new UserType(),array('label' => 'Inscris-toi, choisis ton type, ta catégorie et ta course, merci de renseigner le nom de ton equipe meme si tu es seul!                     ps: prends un curly ;)'));
+
     }
 
     public function getName()

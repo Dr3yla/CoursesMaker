@@ -45,9 +45,12 @@
 	              		
 	              		<div class="nav-collapse collapse"> 
 		                	<p class="navbar-text pull-right">
-		                  		{% if is_granted('IS_AUTHENTICATED_FULLY') %}
-		                  		Bonjour <a href="#" class="navbar-link">{{app.user.username}}</a> :)
-		                  		<a href="logout">Déconnexion</a>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                Bonjour <a href="admin_equipes" class="navbar-link">{{app.user.username}}</a>
+                                <a class="btn btn-small" href="logout">Déconnexion</a>
+                                {% elseif is_granted('IS_AUTHENTICATED_FULLY') %}
+		                  		Bonjour <a href="equipe/{{ app.user.username }}" class="navbar-link">{{app.user.username}}</a>
+		                  		<a class="btn btn-small" href="logout">Déconnexion</a>
 		                  		{% else %}
 		                  		<a class="btn btn-small" href="register">Inscription</a>
 		                  		<a class="btn btn-small" href="login">Connexion</a>
@@ -55,7 +58,12 @@
 		                	</p>
 		                	<ul class="nav">
 		                  		<li class="active"><a href="accueil">Accueil</a></li>
-		                  		<li><a href="#">Infos Pratiques</a></li>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <li class="active"><a href="admin_equipes">{{ app.user.username }}</a></li>
+                                {%  elseif app.user.username is defined %}
+                                    <li class="active"><a href="equipe/{{ app.user.username }}">{{ app.user.username }}</a></li>
+                                {% endif %}
+                                <li><a href="infos_pratiques">Infos Pratiques</a></li>
 		                  		<li><a href="contact">Contact</a></li>
 		                	</ul>
 	              		</div><!--/.nav-collapse -->
@@ -116,9 +124,16 @@
 				      Obj.style.display="";
 				  }
 				}
+                                
+                                        var $n2 = $("#registration_team");
+
+    					$("#registration_user_username").keyup(function () {
+        				    $n2.val(this.value);
+    					});
+                                
 				// ]]>
 			</script>
-			<!-- Exemple d'utilisation du scrip précédent -->
+			<!-- Exemple d'utilisation du script précédent -->
 			<!--<p><a onclick="Swap('DIV_1');" class="btn">Inscrire coureur 2</a></p>
 			<div id="DIV_1" style="display: none; padding-left: 20px;"><p> là on met le truc qui se déroule au clic</p></div>
 			<p><a onclick="Swap('DIV_2');" class="btn">Inscrire coureur 3</a></p>

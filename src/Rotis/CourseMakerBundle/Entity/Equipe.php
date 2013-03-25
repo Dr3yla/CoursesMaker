@@ -5,10 +5,15 @@ namespace Rotis\CourseMakerBundle\Entity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\ExecutionContext;
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Equipe
+ * @UniqueEntity(fields={"username"}, message="Ce nom d'utilisateur est déjà pris (à la casse près)")
  */
 class Equipe implements AdvancedUserInterface, \Serializable
 {
@@ -24,6 +29,7 @@ class Equipe implements AdvancedUserInterface, \Serializable
 
     /**
      * @var string
+     * @Assert\NotBlank()
      */
     private $username;
 
@@ -41,11 +47,7 @@ class Equipe implements AdvancedUserInterface, \Serializable
      * @var boolean
      */
     protected $isActive;
-    
-    /**
-     * @var \Rotis\CourseMakerBundle\Entity\Categorie
-     */
-    private $categorie;
+
    
     /**
      * Get id
@@ -60,13 +62,13 @@ class Equipe implements AdvancedUserInterface, \Serializable
     /**
      * Set categorie
      *
-     * @param string $nomCate
+     * @param \Rotis\CourseMakerBundle\Entity\Categorie $categorie
      * @return Equipe
      */
-    public function setCategorie($nomCate)
+    public function setCategorie($categorie)
     {
-        $this->categorie = new Categorie();
-        $this->categorie->setNom($nomCate);
+        $this->categorie = $categorie;
+        return $this;
     }
 
     /**
@@ -108,7 +110,37 @@ class Equipe implements AdvancedUserInterface, \Serializable
     /**
      * @var \Rotis\CourseMakerBundle\Entity\Course
      */
-    private $course;
+    protected $course;
+
+    /**
+     * @var \Rotis\CourseMakerBundle\Entity\Categorie
+     */
+    protected $categorie;
+
+    /**
+     * Set salt
+     *
+     *
+     * @param string $salt
+     * @return User
+     */
+    public function setSalt($salt)
+    {
+        $this->salt = $salt;
+	    
+        return $this;
+    }
+
+    /**
+     * Get salt
+     *
+	* @return string
+	*/
+	    public function getSalt()
+	    {
+		return $this->salt;
+	    }
+
 
     /**
      * Constructor
@@ -117,8 +149,34 @@ class Equipe implements AdvancedUserInterface, \Serializable
     {
         $this->joueurs = new \Doctrine\Common\Collections\ArrayCollection();
         $this->isActive = true;
+        $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+        $this->valide = false;
     }
-    
+   
+ 
+    /**
+     * Get type
+     * @return \Rotis\CourseMakerBundle\Entity\Type
+     */
+    public function getType()
+    {
+        var_dump($this->course);die;
+        return $this->course->getType();
+    }
+
+    /**
+     *
+     * Set type
+     * @param \Rotis\CourseMakerBundle\Entity\Type $type
+     * @return Equipe
+     */
+    public function setType($type)
+    {
+        $this->getCourse()->setType($type);
+        return $this;
+    }
+
+
     /**
      * Add joueurs
      *
@@ -158,10 +216,9 @@ class Equipe implements AdvancedUserInterface, \Serializable
      * @param \Rotis\CourseMakerBundle\Entity\Course $course
      * @return Equipe
      */
-    public function setCourse(\Rotis\CourseMakerBundle\Entity\Course $course = null)
+    public function setCourse(\Rotis\CourseMakerBundle\Entity\Course $course)
     {
         $this->course = $course;
-    
         return $this;
     }
 
@@ -195,13 +252,6 @@ class Equipe implements AdvancedUserInterface, \Serializable
         return $this;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function getSalt()
-    {
-        return $this->salt;
-    }
 
     /**
      * @inheritDoc
@@ -212,14 +262,14 @@ class Equipe implements AdvancedUserInterface, \Serializable
     }
 
     /**
-     * Set username
+     * Set Password
      *
-     * @param string $username
+     * @param string $password
      * @return Equipe
      */
     public function setPassword($password)
     {
-        $this->passwors = $password;
+        $this->password = $password;
         return $this;
     }
 
@@ -260,7 +310,7 @@ class Equipe implements AdvancedUserInterface, \Serializable
 
     public function isEqualTo(UserInterface $user)
     {
-    return $this->id === $user->getId();
+    return $this->username === $user->getUsername();
     }
 
     public function isAccountNonExpired()

@@ -123,7 +123,7 @@ class Course
     public function setDatetimeFin($datetimeFin)
     {
         $this->datetime_fin = $datetimeFin;
-    
+
         return $this;
     }
 
@@ -154,7 +154,7 @@ class Course
     /**
      * @var \Rotis\CourseMakerBundle\Entity\Type
      */
-    private $type;
+    protected $type;
 
     /**
      * Constructor
@@ -164,7 +164,7 @@ class Course
         $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
         $this->equipes = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Add categories
      *
@@ -174,7 +174,7 @@ class Course
     public function addCategorie(\Rotis\CourseMakerBundle\Entity\Categorie $categories)
     {
         $this->categories[] = $categories;
-    
+
         return $this;
     }
 
@@ -191,7 +191,7 @@ class Course
     /**
      * Get categories
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCategories()
     {
@@ -263,7 +263,6 @@ class Course
     public function setType(\Rotis\CourseMakerBundle\Entity\Type $type = null)
     {
         $this->type = $type;
-    
         return $this;
     }
 
